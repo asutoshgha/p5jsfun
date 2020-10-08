@@ -19,7 +19,7 @@ var openSet=[];
 var closedSet=[];
 var start,end;
 var w,h;
-var path=[];
+var path;
 function Spot(i,j){
 	this.i=i;
 	this.j=j;
@@ -92,12 +92,7 @@ function draw(){
 		var current=openSet[winner];
 		 
 		if(current === end){
-			var temp=current;
-			path.push(temp);
-			while(temp.previous){
-				path.push(temp.previous);
-				temp=temp.previous;
-			}	
+			
 			noLoop();
 			console.log("done!!!!!");
 		}
@@ -140,6 +135,13 @@ function draw(){
 	for(var i=0;i<openSet.length;i++){
 		openSet[i].show(color(0,255,0));
 	}
+	path=[];
+	var temp=current;
+	path.push(temp);
+	while(temp.previous){
+				path.push(temp.previous);
+				temp=temp.previous;
+	}	
 	
 	for(var i=0;i<path.length;i++){
 		path[i].show(color(0,0,255));
