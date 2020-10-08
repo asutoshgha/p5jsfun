@@ -15,6 +15,7 @@ var cols=25;
 var rows=25;
 var grid=new Array(cols);
 
+var nosolution;
 var openSet=[];
 var closedSet=[];
 var start,end;
@@ -28,8 +29,15 @@ function Spot(i,j){
 	this.h=0;
 	this.neighbors=[];
 	this.previous=undefined;
+	this.wall=false;
+	if(random(1)<0.3){
+		this.wall=true;
+	}
 	this.show=function(col){
 		fill(col);
+		if(this.wall){
+			fill(0);
+		}
 		noStroke(0);
 		rect(this.i*w,this.j*h,w-1,h-1);	
 	}
@@ -72,9 +80,10 @@ function setup(){
 
 	start=grid[0][0];
 	end=grid[cols-1][rows-1];
+	start.wall=false;
+	end.wall=false;
 	openSet.push(start);
 
-	console.log(grid);
 }
 
 //this is actually looping on its own to keep drawing on the screen..
@@ -101,7 +110,7 @@ function draw(){
 		var neighbors=current.neighbors;
 		for(var i=0;i<neighbors.length;i++){
 			var neighbor=neighbors[i];
-			if(!closedSet.includes(neighbor)){
+			if(!closedSet.includes(neighbor) && !neighbor.wall){
 				var tempG=current.g+1;
 				if(openSet.includes(neighbor)){
 					if(tempG<neighbor.g){
@@ -122,6 +131,10 @@ function draw(){
 	}
 	else{
 		// no solution
+		console.log("no solution");
+		nosolution=true;
+		noLoop();
+
 	}
 	background(0);
 	for(var i=0;i<cols;i++){
@@ -135,6 +148,7 @@ function draw(){
 	for(var i=0;i<openSet.length;i++){
 		openSet[i].show(color(0,255,0));
 	}
+	if(!nosolution){
 	path=[];
 	var temp=current;
 	path.push(temp);
@@ -142,7 +156,7 @@ function draw(){
 				path.push(temp.previous);
 				temp=temp.previous;
 	}	
-	
+}
 	for(var i=0;i<path.length;i++){
 		path[i].show(color(0,0,255));
 	}
