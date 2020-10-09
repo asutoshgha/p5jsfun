@@ -11,8 +11,8 @@ function heuristic(a,b){
 	var d=abs(a.i-b.i)+abs(a.j-b.j);
 	return d;
 }
-var cols=25;
-var rows=25;
+var cols=50;
+var rows=50;
 var grid=new Array(cols);
 
 var nosolution;
